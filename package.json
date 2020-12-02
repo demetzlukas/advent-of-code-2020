@@ -6,7 +6,7 @@
     "scripts": {
         "start": "ts-node ./src/app.ts",
         "run": "tsc && node ./bin/app.js",
-        "debug": "tsc && node --inspect-brk=9229 ./bin/app.js"
+        "debug": "tsc && node --inspect=9229 ./bin/app.js"
     },
     "keywords": [],
     "author": "Lukas Demetz",
