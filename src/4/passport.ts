@@ -81,8 +81,7 @@ export class Passport {
                     this.expirationYear >= 2020 && this.expirationYear <= 2030
                 );
             case 'hgt':
-                if (!this.height) return false;
-                const parts = this.height.match(/(\d+)(cm|in)/);
+                const parts = this.height?.match(/(\d+)(cm|in)/);
                 if (parts == null) return false;
                 const [_, height, unit] = parts;
                 let heightAsInt = parseInt(height);
@@ -90,16 +89,11 @@ export class Passport {
                     return heightAsInt >= 150 && heightAsInt <= 193;
                 return heightAsInt >= 59 && heightAsInt <= 76;
             case 'hcl':
-                return (
-                    this.hairColor &&
-                    this.hairColor.match(/^#[0-9a-f]{6}$/) != null
-                );
+                return this.hairColor?.match(/^#[0-9a-f]{6}$/) != null;
             case 'ecl':
                 return Passport.VALID_EYE_COLORS.includes(this.eyeColor);
             case 'pid':
-                return (
-                    this.passportID && this.passportID.match(/^\d{9}$/) != null
-                );
+                return this.passportID?.match(/^\d{9}$/) != null;
             case 'cid':
                 return true;
             default:
