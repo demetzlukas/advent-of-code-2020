@@ -9,12 +9,9 @@ function getNumberOfCorrectPasswords(input: string[]): number {
 
     for (const line of input) {
         const [_, low, high, character, password] = REGEX.exec(line);
-        let numberOfCharacterOccurrences = 0;
-        for (const c of password) {
-            if (c === character) {
-                numberOfCharacterOccurrences++;
-            }
-        }
+        let numberOfCharacterOccurrences = password
+            .split('')
+            .filter(c => c === character).length;
         if (
             numberOfCharacterOccurrences >= parseInt(low) &&
             numberOfCharacterOccurrences <= parseInt(high)
@@ -31,11 +28,13 @@ function getNumberOfCorrectPasswordsPart2(input: string[]): number {
 
     for (const line of input) {
         const [_, first, second, character, password] = REGEX.exec(line);
+        const firstPostion = parseInt(first) - 1;
+        const secondPosition = parseInt(second) - 1;
 
         if (
-            (password[parseInt(first) - 1] === character ||
-                password[parseInt(second) - 1] === character) &&
-            password[parseInt(first) - 1] !== password[parseInt(second) - 1]
+            (password[firstPostion] === character ||
+                password[secondPosition] === character) &&
+            password[firstPostion] !== password[secondPosition]
         ) {
             numberOfCorrectPasswords++;
         }
