@@ -9,6 +9,16 @@ export class Passport {
         'pid', // (Passport ID)
         'cid', // (Country ID)
     ];
+    private static VALID_EYE_COLORS = [
+        'amb',
+        'blu',
+        'brn',
+        'gry',
+        'grn',
+        'hzl',
+        'oth',
+    ];
+
     private birthYear: number;
     private issueYear: number;
     private expirationYear: number;
@@ -85,15 +95,7 @@ export class Passport {
                     this.hairColor.match(/^#[0-9a-f]{6}$/) != null
                 );
             case 'ecl':
-                return [
-                    'amb',
-                    'blu',
-                    'brn',
-                    'gry',
-                    'grn',
-                    'hzl',
-                    'oth',
-                ].includes(this.eyeColor);
+                return Passport.VALID_EYE_COLORS.includes(this.eyeColor);
             case 'pid':
                 return (
                     this.passportID && this.passportID.match(/^\d{9}$/) != null
