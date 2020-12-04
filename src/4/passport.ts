@@ -72,18 +72,17 @@ export class Passport {
                 );
             case 'hgt':
                 if (!this.height) return false;
-                const [_, height, unit] = this.height.match(/(\d+)(\w+)/);
+                const parts = this.height.match(/(\d+)(cm|in)/);
+                if (parts == null) return false;
+                const [_, height, unit] = parts;
                 let heightAsInt = parseInt(height);
                 if (unit === 'cm')
                     return heightAsInt >= 150 && heightAsInt <= 193;
-                if (unit === 'in')
-                    return heightAsInt >= 59 && heightAsInt <= 76;
-                return false;
+                return heightAsInt >= 59 && heightAsInt <= 76;
             case 'hcl':
                 return (
                     this.hairColor &&
-                    this.hairColor.match(/#[0-9a-f]{6}/) != null &&
-                    this.hairColor.length == 7
+                    this.hairColor.match(/^#[0-9a-f]{6}$/) != null
                 );
             case 'ecl':
                 return [
@@ -97,9 +96,7 @@ export class Passport {
                 ].includes(this.eyeColor);
             case 'pid':
                 return (
-                    this.passportID &&
-                    this.passportID.match(/\d+/) != null &&
-                    this.passportID.length == 9
+                    this.passportID && this.passportID.match(/^\d{9}$/) != null
                 );
             case 'cid':
                 return true;
