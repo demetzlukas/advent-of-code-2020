@@ -38,10 +38,10 @@ export class Passport {
         { key: 'cid', validation: (value: string) => true },
     ];
 
-    private property: Map<string, string>;
+    private properties: Map<string, string>;
 
     constructor() {
-        this.property = new Map();
+        this.properties = new Map();
     }
 
     public static createFromString(pairs: string[]): Passport {
@@ -49,7 +49,7 @@ export class Passport {
 
         pairs.forEach(pair => {
             const [key, value] = pair.split(':');
-            passport.property.set(key, value);
+            passport.properties.set(key, value);
         });
 
         return passport;
@@ -59,13 +59,13 @@ export class Passport {
         if (!checkValues) {
             for (const field of Passport.FIELDS) {
                 if (field.key === 'cid') continue;
-                if (!this.property.get(field.key)) return false;
+                if (!this.properties.get(field.key)) return false;
             }
             return true;
         }
 
         for (const field of Passport.FIELDS) {
-            if (!field.validation(this.property.get(field.key))) return false;
+            if (!field.validation(this.properties.get(field.key))) return false;
         }
         return true;
     }
