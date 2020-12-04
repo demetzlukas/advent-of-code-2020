@@ -89,11 +89,11 @@ export class Passport {
                     return heightAsInt >= 150 && heightAsInt <= 193;
                 return heightAsInt >= 59 && heightAsInt <= 76;
             case 'hcl':
-                return this.hairColor?.match(/^#[0-9a-f]{6}$/) != null;
+                return /^#[0-9a-f]{6}$/.test(this.hairColor);
             case 'ecl':
                 return Passport.VALID_EYE_COLORS.includes(this.eyeColor);
             case 'pid':
-                return this.passportID?.match(/^\d{9}$/) != null;
+                return /^\d{9}$/.test(this.passportID);
             case 'cid':
                 return true;
             default:
