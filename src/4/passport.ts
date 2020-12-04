@@ -33,7 +33,7 @@ export class Passport {
     public static createFromString(pairs: string[]): Passport {
         let passport = new Passport();
 
-        for (const pair of pairs) {
+        pairs.forEach(pair => {
             const [key, value] = pair.split(':');
 
             switch (key) {
@@ -65,7 +65,7 @@ export class Passport {
                 default:
                     throw new Error('Unknown key');
             }
-        }
+        });
 
         return passport;
     }
