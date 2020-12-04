@@ -123,7 +123,7 @@ export class Passport {
         return true;
     }
 
-    public getValue(key: string) {
+    public getValue(key: string): number | string {
         switch (key) {
             case 'byr':
                 return this.birthYear;
