@@ -6,7 +6,7 @@ const fileName = './input/4.txt';
 export async function main() {
     const input = await readLinesFromInput(fileName, '\r\n\r\n');
     let passports: Passport[] = input.map(line =>
-        Passport.createFromString(line.split(/ |\n|\r\n/))
+        Passport.createFromString(line.split(/\s+/))
     );
 
     console.log(
