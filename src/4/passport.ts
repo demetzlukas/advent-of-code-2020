@@ -60,7 +60,7 @@ export class Passport {
         return passport;
     }
 
-    public isKeyValid(key: string): boolean {
+    public isValueValid(key: string): boolean {
         switch (key) {
             case 'byr':
                 return this.birthYear >= 1920 && this.birthYear <= 2002;
@@ -115,7 +115,7 @@ export class Passport {
         }
 
         for (const key of Passport.FIELDS) {
-            if (!this.isKeyValid(key)) return false;
+            if (!this.isValueValid(key)) return false;
         }
         return true;
     }
