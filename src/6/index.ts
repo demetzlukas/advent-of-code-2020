@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 const fileName = './input/6.txt';
 
 export async function main() {
-    const answersPerGroupAndPerson = await (
+    const answersPerGroupAndPerson = (
         await readLinesFromInput(fileName, '\r\n\r\n')
     ).map(group => group.split(/\s+/).map(g => g.split('')));
 
