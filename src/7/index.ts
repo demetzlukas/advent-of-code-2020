@@ -33,19 +33,8 @@ export async function main() {
 
     const colorToSearch = 'shiny gold';
     const bagToSearch = bags.get(colorToSearch);
-    const containingBags: Set<Bag> = new Set();
-    const bagsToVisit: Bag[] = [bagToSearch];
 
-    while (bagsToVisit.length > 0) {
-        const bag = bagsToVisit.pop();
-        bag.containingBags.forEach(b => {
-            if (!containingBags.has(b)) {
-                bagsToVisit.push(b);
-                containingBags.add(b);
-            }
-        });
-    }
-    console.log(`Part 1: ${containingBags.size}`);
+    console.log(`Part 1: ${bagToSearch.getBagsThisBagIsIncluded().size}`);
 
-    console.log(`Part 2: ${bagToSearch.calculateNeededBags() - 1}`);
+    console.log(`Part 2: ${bagToSearch.getNumberOfBagsNeededForThisBag()}`);
 }

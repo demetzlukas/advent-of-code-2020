@@ -37,7 +37,28 @@ export class Bag {
         this.containingBags.push(bag);
     }
 
-    public calculateNeededBags(): number {
+    public getBagsThisBagIsIncluded(): Set<Bag> {
+        const containingBags: Set<Bag> = new Set();
+        const bagsToVisit: Bag[] = [this];
+
+        while (bagsToVisit.length > 0) {
+            const bag = bagsToVisit.pop();
+            bag.containingBags.forEach(b => {
+                if (!containingBags.has(b)) {
+                    bagsToVisit.push(b);
+                    containingBags.add(b);
+                }
+            });
+        }
+
+        return containingBags;
+    }
+
+    public getNumberOfBagsNeededForThisBag(): number {
+        return this.calculateNeededBags() - 1;
+    }
+
+    private calculateNeededBags(): number {
         return (
             1 +
             this.containedBags
