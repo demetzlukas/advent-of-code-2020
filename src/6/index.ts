@@ -1,5 +1,5 @@
 import { readLinesFromInput } from '../utils/readFile';
-import * as _ from 'lodash';
+import { intersection } from 'lodash';
 
 const fileName = './input/6.txt';
 
@@ -10,8 +10,7 @@ export async function main() {
 
     console.log(
         `Part 1: ${answersPerGroupAndPerson
-            .map(group => _.flatten(group))
-            .map(answers => new Set(answers).size)
+            .map(answers => new Set(answers.flat()).size)
             .reduce((sum, current) => sum + current)}`
     );
 
@@ -25,8 +24,8 @@ export async function main() {
 function getNumberOfSharedAnswers(answers: string[][]): number {
     let sharedAnswers = [];
 
-    answers.forEach(a => (sharedAnswers = [...sharedAnswers, ..._.flatten(a)]));
-    answers.forEach(a => (sharedAnswers = _.intersection(sharedAnswers, a)));
+    answers.forEach(a => (sharedAnswers = [...sharedAnswers, ...a.flat()]));
+    answers.forEach(a => (sharedAnswers = intersection(sharedAnswers, a)));
 
     return sharedAnswers.length;
 }
