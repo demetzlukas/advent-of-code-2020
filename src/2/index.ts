@@ -32,9 +32,8 @@ function getNumberOfCorrectPasswordsPart2(input: string[]): number {
         const secondPosition = parseInt(second) - 1;
 
         if (
-            (password[firstPostion] === character ||
-                password[secondPosition] === character) &&
-            password[firstPostion] !== password[secondPosition]
+            +(password[firstPostion] === character) ^
+            +(password[secondPosition] === character)
         ) {
             numberOfCorrectPasswords++;
         }
