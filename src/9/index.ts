@@ -1,4 +1,3 @@
-import { values } from 'lodash';
 import { readLinesFromInput } from '../utils/readFile';
 
 const fileName = './input/9.txt';
