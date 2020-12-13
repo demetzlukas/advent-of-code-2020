@@ -50,7 +50,7 @@ function getTimestamp(
     busses: { intervall: number; index: number }[],
     busIndex: number,
     timestamp: number
-) {
+): boolean {
     if (busIndex == busses.length) {
         return true;
     }
