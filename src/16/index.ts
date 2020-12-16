@@ -1,4 +1,3 @@
-import { setMaxListeners } from 'process';
 import { readLinesFromInput } from '../utils/readFile';
 
 const fileName = './input/16.txt';
@@ -63,8 +62,8 @@ export async function main() {
     possibleAssignments
         .map(v =>
             [...v.entries()]
-                .filter(([index, value]) => value)
-                .map(([index, value]) => index)
+                .filter(([_, value]) => value)
+                .map(([index]) => index)
         )
         .forEach((i, index) => m.set(rules[index].name, i));
 
