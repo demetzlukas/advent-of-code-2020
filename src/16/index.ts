@@ -24,9 +24,9 @@ export async function main() {
     });
     const myTicket = input[1]
         .split('\r\n')
-        .slice(1)
-        .map(line => line.split(',').map(v => parseInt(v)))
-        .pop();
+        .pop()
+        .split(',')
+        .map(v => parseInt(v));
     const nearbyTickets = input[2]
         .split('\r\n')
         .slice(1)
