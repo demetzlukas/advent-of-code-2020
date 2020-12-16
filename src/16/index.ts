@@ -65,12 +65,14 @@ export async function main() {
                 .filter(([_, value]) => value)
                 .map(([index]) => index)
         )
-        .forEach((i, index) => m.set(rules[index].name, i));
+        .forEach((possibleColumns, index) =>
+            m.set(rules[index].name, possibleColumns)
+        );
 
     const assignment: string[] = [];
 
     while (m.size > 0) {
-        const [ruleName, possibleIndices] = [
+        const [ruleName, possibleColumns] = [
             ...m.entries(),
         ].reduce((min, current) =>
             current[1].length < min[1].length ? current : min
@@ -78,9 +80,9 @@ export async function main() {
 
         m.delete(ruleName);
 
-        for (const index of possibleIndices) {
-            if (assignment[index] === undefined) {
-                assignment[index] = ruleName;
+        for (const column of possibleColumns) {
+            if (assignment[column] === undefined) {
+                assignment[column] = ruleName;
                 break;
             }
         }
