@@ -35,35 +35,18 @@ export async function main() {
         )
         .filter(x => x.intervall != -1);
 
-    // works for smaller examples
-    let i = 1;
-    while (true) {
-        if (getTimestamp(busses, 1, busses[0].intervall * i)) {
-            console.log(`Part 2: ${busses[0].intervall * i}`);
-            break;
-        }
-        i++;
-    }
-}
+    console.log(busses);
 
-function getTimestamp(
-    busses: { intervall: number; index: number }[],
-    busIndex: number,
-    timestamp: number
-): boolean {
-    if (busIndex == busses.length) {
-        return true;
+    let timestamp = 0;
+    let step = 1;
+    for (const { intervall, index } of busses) {
+        while ((timestamp + index) % intervall != 0) {
+            timestamp += step;
+        }
+        console.log(timestamp);
+
+        step *= intervall;
     }
 
-    const bus = busses[busIndex];
-    let i = Math.floor(timestamp / bus.intervall) - 1;
-    while (true) {
-        if (bus.intervall * i == timestamp + bus.index) {
-            if (getTimestamp(busses, busIndex + 1, timestamp)) return true;
-        }
-        if (bus.intervall * i > timestamp + bus.index) {
-            return false;
-        }
-        i++;
-    }
+    console.log(`Part 2: ${timestamp}`);
 }
