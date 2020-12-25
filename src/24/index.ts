@@ -1,4 +1,3 @@
-import { notStrictEqual } from 'assert';
 import { readLinesFromInput } from '../utils/readFile';
 
 const fileName = './input/24.txt';
