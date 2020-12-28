@@ -1,17 +1,12 @@
-export class Tile {
-    public flip() {
-        const tmp = this.top;
-        this.top = this.left;
-        this.left = this.bottom;
-        this.bottom = this.right;
-        this.right = tmp;
+import { reverse } from '../utils/string';
 
-        const tmpTile = this.topTile;
-        this.topTile = this.leftTile;
-        this.leftTile = this.bottomTile;
-        this.bottomTile = this.rightTile;
-        this.rightTile = tmpTile;
-    }
+export class Tile {
+    private static TOP = 0;
+    private static RIGHT = 1;
+    private static BOTTOM = 2;
+    private static LEFT = 3;
+    public static DIRECTIONS = [Tile.TOP, Tile.RIGHT, Tile.BOTTOM, Tile.LEFT];
+
     private _id: number;
     public get id(): number {
         return this._id;
@@ -92,55 +87,169 @@ export class Tile {
         this._rightTile = v;
     }
 
-    private _neighbors: Tile[];
-    public get neighbors(): Tile[] {
-        return this._neighbors;
-    }
-    public set neighbors(v: Tile[]) {
-        this._neighbors = v;
-    }
-
     constructor(id: number, layout: string[]) {
         this.id = id;
         this.layout = layout;
-        this.neighbors = [];
-
         this.calculateBorders();
     }
 
     private calculateBorders() {
-        this.bottom = this.layout[0];
-
-        this.top = this.layout[this.layout.length - 1];
-
-        let left: string[] = [];
-        for (let i = 0; i < this.layout.length; i++) {
-            const element = this.layout[i][0];
-
-            left.push(element);
-        }
-
-        this.left = left.join('');
-
-        let right: string[] = [];
-        for (let i = 0; i < this.layout.length; i++) {
-            const element = this.layout[i][this.layout[i].length - 1];
-
-            right.push(element);
-        }
-
-        this.right = right.join('');
+        this.top = this.layout[0];
+        this.bottom = this.layout[this.layout.length - 1];
+        this.left = this.layout.map(line => line[0]).join('');
+        this.right = this.layout.map(line => line[line.length - 1]).join('');
     }
 
-    public flipVertically() {
-        let temp: string[] = [];
+    public flip(flippedTiles: number[] = []) {
+        if (flippedTiles.includes(this.id)) return;
 
-        for (const line of this.layout) {
-            temp.push(line.split('').reverse().join(''));
+        flippedTiles.push(this.id);
+        const tmp = this.top;
+        this.top = reverse(this.left);
+        this.left = this.bottom;
+        this.bottom = reverse(this.right);
+        this.right = tmp;
+
+        const tmpTile = this.topTile;
+        this.topTile = this.leftTile;
+        this.leftTile = this.bottomTile;
+        this.bottomTile = this.rightTile;
+        this.rightTile = tmpTile;
+
+        for (const direction of Tile.DIRECTIONS) {
+            this.getTile(direction)?.flip(flippedTiles);
         }
     }
 
-    public flipHorizontal() {
-        this.layout = this.layout.reverse();
+    public flipVertically(flippedTiles: number[] = []) {
+        if (flippedTiles.includes(this.id)) return;
+
+        flippedTiles.push(this.id);
+
+        const tmp = this.right;
+        this.right = this.left;
+        this.left = tmp;
+        this.top = reverse(this.top);
+        this.bottom = reverse(this.bottom);
+
+        const tmpTile = this.rightTile;
+        this.rightTile = this.leftTile;
+        this.leftTile = tmpTile;
+
+        for (const direction of Tile.DIRECTIONS) {
+            this.getTile(direction)?.flipVertically(flippedTiles);
+        }
+    }
+
+    public flipHorizontally(flippedTiles: number[] = []) {
+        if (flippedTiles.includes(this.id)) return;
+
+        flippedTiles.push(this.id);
+
+        const tmp = this.bottom;
+        this.bottom = this.top;
+        this.top = tmp;
+        this.right = reverse(this.right);
+        this.left = reverse(this.left);
+
+        const tmpTile = this.topTile;
+        this.topTile = this.bottomTile;
+        this.bottomTile = tmpTile;
+
+        for (const direction of Tile.DIRECTIONS) {
+            this.getTile(direction)?.flipHorizontally(flippedTiles);
+        }
+    }
+
+    public getNumberOfNeighbors(): number {
+        return Tile.DIRECTIONS.map(direction => this.getTile(direction)).filter(
+            tile => tile
+        ).length;
+    }
+
+    public get(direction: number): string {
+        switch (direction) {
+            case Tile.TOP:
+                return this.top;
+            case Tile.RIGHT:
+                return this.right;
+            case Tile.BOTTOM:
+                return this.bottom;
+            case Tile.LEFT:
+                return this.left;
+            default:
+                throw new Error('Unknown direction ' + direction);
+        }
+    }
+
+    public getTile(direction: number): Tile {
+        switch (direction) {
+            case Tile.TOP:
+                return this.topTile;
+            case Tile.RIGHT:
+                return this.rightTile;
+            case Tile.BOTTOM:
+                return this.bottomTile;
+            case Tile.LEFT:
+                return this.leftTile;
+            default:
+                throw new Error('Unknown direction ' + direction);
+        }
+    }
+
+    public setTile(direction: number, tile: Tile) {
+        switch (direction) {
+            case Tile.TOP:
+                this.topTile = tile;
+                break;
+            case Tile.RIGHT:
+                this.rightTile = tile;
+                break;
+            case Tile.BOTTOM:
+                this.bottomTile = tile;
+                break;
+            case Tile.LEFT:
+                this.leftTile = tile;
+                return this.leftTile;
+            default:
+                throw new Error('Unknown direction ' + direction);
+        }
+    }
+
+    public getImageWithRemovedBorders(): string[] {
+        return this.layout
+            .slice(1, this.layout.length - 1)
+            .map(line => line.substring(1, line.length - 1));
+    }
+
+    public align(): boolean {
+        if (this.top === this.layout[0]) {
+            return true;
+        }
+        if (this.bottom === this.layout[0]) {
+            this.layout = [...this.layout.reverse()];
+        } else if (this.bottom === reverse(this.layout[0])) {
+            this.layout = [...this.layout.reverse().map(line => reverse(line))];
+        } else if (this.bottom === reverse(this.bottom)) {
+            this.layout = this.layout.map(line => reverse(line));
+        } else {
+            this.layout = this.rotateClockwise();
+        }
+
+        return this.align();
+    }
+
+    private rotateClockwise(): string[] {
+        const flipped: string[][] = [];
+        for (let index = 0; index < this.layout[0].length; index++) {
+            flipped.push([]);
+        }
+
+        for (let i = 0; i < this.layout.length; i++) {
+            for (let j = 0; j < this.layout[i].length; j++) {
+                flipped[j][this.layout.length - 1 - i] = this.layout[i][j];
+            }
+        }
+        return flipped.map(line => line.join(''));
     }
 }
