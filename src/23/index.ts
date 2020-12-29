@@ -33,10 +33,7 @@ export async function main() {
 }
 
 function getResultString(string: string): string {
-    return string
-        .substring(0, string.length - 2)
-        .split(',')
-        .join('');
+    return string.slice(0, -2).split(',').join('');
 }
 
 // first solution, did not work for part 2
