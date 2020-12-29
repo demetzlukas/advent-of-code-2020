@@ -217,9 +217,7 @@ export class Tile {
     }
 
     public getImageWithRemovedBorders(): string[] {
-        return this.layout
-            .slice(1, this.layout.length - 1)
-            .map(line => line.substring(1, line.length - 1));
+        return this.layout.slice(1, -1).map(line => line.slice(1, -1));
     }
 
     public align(): boolean {
